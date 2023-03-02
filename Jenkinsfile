@@ -29,6 +29,7 @@ pipeline{
     stage('Build'){
       steps{
         echo 'Build'
+        sh './gradlew clean build'
         sh 'docker build -t server .'
       }
 
