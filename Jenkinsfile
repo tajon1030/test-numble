@@ -2,7 +2,7 @@ pipeline{
   agent any
 
   tools {
-      gradle 'gradle'
+      gradle 'gradle7.6'
   }
 
   stages{
@@ -29,9 +29,9 @@ pipeline{
     stage('Build'){
       steps{
         echo 'Build'
-        dir('./server') {
-          sh 'docker build -t server .'
-        }
+        sh 'chmod 755 ./gradlew'
+        sh './gradlew clean build'
+        sh 'docker build -t server .'
       }
 
       post {
@@ -45,11 +45,8 @@ pipeline{
       agent any
 
       steps {
-        dir ('./server'){
-            sh '''
-            docker run -p 80:80 -d server
-            '''
-        }
+        sh 'docker run -p 80:80 -d server'
       }
+    }
   }
 }
