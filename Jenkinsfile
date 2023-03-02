@@ -29,9 +29,7 @@ pipeline{
     stage('Build'){
       steps{
         echo 'Build'
-        dir('./server') {
-          sh 'docker build -t server .'
-        }
+        sh 'docker build -t server .'
       }
 
       post {
@@ -45,11 +43,7 @@ pipeline{
       agent any
 
       steps {
-        dir ('./server'){
-            sh '''
-            docker run -p 80:80 -d server
-            '''
-        }
+        sh 'docker run -p 80:80 -d server'
       }
     }
   }
