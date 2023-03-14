@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum UserRole {
     MEMBER("member"),
-    ADVERTISER("advertiser");
+    ADMIN("admin");
 
     private final String value;
 
