@@ -1,6 +1,6 @@
 package com.timedeal.numble.controller.security;
 
-import com.timedeal.numble.entity.UserEntity;
+import com.timedeal.numble.controller.user.User;
 import com.timedeal.numble.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -20,10 +20,10 @@ public class SecurityController {
      */
     @PostMapping("login")
     public ResponseEntity<?> login(HttpServletRequest request, @RequestBody SignInRequest signInRequest){
-        UserEntity loginUserEntity = userService.login(signInRequest);
+        User loginUser = userService.login(signInRequest);
         // 세션저장
         HttpSession session = request.getSession();
-        session.setAttribute("loginUser", loginUserEntity);
+        session.setAttribute("loginUser", loginUser);
         return ResponseEntity.ok().build();
     }
 

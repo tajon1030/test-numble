@@ -4,6 +4,7 @@ import com.timedeal.numble.controller.error.CustomException;
 import com.timedeal.numble.controller.error.ErrorCode;
 import com.timedeal.numble.controller.security.SignInRequest;
 import com.timedeal.numble.controller.user.SignUpRequest;
+import com.timedeal.numble.controller.user.User;
 import com.timedeal.numble.controller.user.UserUpdateRequest;
 import com.timedeal.numble.entity.UserEntity;
 import com.timedeal.numble.repository.UserRepository;
@@ -24,8 +25,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public UserEntity findByUserId(Long userId){
-        return userRepository.findById(userId)
+    public User findByLoginId(String loginId){
+        return userRepository.findByLoginId(loginId)
+                .map(User::fromUserEntity)
                 .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
@@ -47,13 +49,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserEntity login(@Valid SignInRequest signInRequest) {
+    public User login(@Valid SignInRequest signInRequest) {
         // 검색
         return userRepository.findByLoginId(signInRequest.getLoginId())
                 .map(userEntity -> {
                     // 패스워드 일치 시
                     if(userEntity.getPassword().equals(signInRequest.getPassword())){
-                        return userEntity;
+                        return User.fromUserEntity(userEntity);
                     }else{
                         throw new CustomException(ErrorCode.INVALID_PASSWORD);
                     }
@@ -62,17 +64,20 @@ public class UserService {
     }
 
     @Transactional
-    public void withdraw(Long userId) {
-        userRepository.deleteById(userId);
+    public void withdraw(String loginId) {
+        userRepository.deleteByLoginId(loginId);
     }
 
     @Transactional
-    public UserEntity modifyUser(Long userId, @Valid UserUpdateRequest request) {
-        return userRepository.findById(userId).map(userEntity -> userRepository.save(
-                userEntity.update(
-                        StringUtils.defaultIfBlank(request.getUserName(),userEntity.getUserName()),
-                        StringUtils.defaultIfBlank(request.getPassword(),userEntity.getPassword())
-                )
-        )).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+    public User modifyUser(String loginId, @Valid UserUpdateRequest request) {
+        return userRepository.findByLoginId(loginId).map(userEntity -> {
+            UserEntity updatedUserEntity = userRepository.save(
+                    userEntity.update(
+                            StringUtils.defaultIfBlank(request.getUserName(), userEntity.getUserName()),
+                            StringUtils.defaultIfBlank(request.getPassword(), userEntity.getPassword())
+                    )
+            );
+            return User.fromUserEntity(updatedUserEntity);
+        }).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

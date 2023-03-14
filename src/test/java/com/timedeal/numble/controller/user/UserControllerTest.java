@@ -80,17 +80,12 @@ class UserControllerTest {
 
     @Test
     public void 회원탈퇴() throws Exception {
-        UserEntity userEntity = UserEntity.builder()
-                .loginId("loginId")
-                .password("password")
-                .userName("userName")
-                .userRole(UserRole.MEMBER)
-                .build();
+        User user = new User("loginId","userName",UserRole.MEMBER);
 
-        doNothing().when(userService).withdraw(userEntity.getId());
+        doNothing().when(userService).withdraw(user.getLoginId());
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        mockHttpSession.setAttribute("loginUser", userEntity);
+        mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(delete("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -101,25 +96,20 @@ class UserControllerTest {
 
     @Test
     public void 내정보조회() throws Exception {
-        UserEntity userEntity = UserEntity.builder()
-                .loginId("loginId")
-                .password("password")
-                .userName("userName")
-                .userRole(UserRole.MEMBER)
-                .build();
+        User user = new User("loginId","userName",UserRole.MEMBER);
 
-        when(userService.findByUserId(userEntity.getId()))
-                .thenReturn(userEntity);
+        when(userService.findByLoginId(user.getLoginId()))
+                .thenReturn(user);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        mockHttpSession.setAttribute("loginUser", userEntity);
+        mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(get("/api/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
                         .session(mockHttpSession)
                 ).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(User.fromUserEntity(userEntity))));
+                .andExpect(content().string(objectMapper.writeValueAsString(user)));
     }
 
     @Test
@@ -131,9 +121,8 @@ class UserControllerTest {
                 .userName("userName")
                 .userRole(UserRole.MEMBER)
                 .build();
-
+        User user = User.fromUserEntity(userEntity);
         UserUpdateRequest updateRequest = new UserUpdateRequest("userName2","password2");
-
 
         UserEntity updateUserEntity = UserEntity.builder()
                 .id(userEntity.getId())
@@ -142,11 +131,11 @@ class UserControllerTest {
                 .userName(updateRequest.getUserName())
                 .userRole(userEntity.getUserRole())
                 .build();
-        when(userService.modifyUser(anyLong(), any()))
-                .thenReturn(updateUserEntity);
+        when(userService.modifyUser(anyString(), any()))
+                .thenReturn(User.fromUserEntity(updateUserEntity));
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        mockHttpSession.setAttribute("loginUser", userEntity);
+        mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(patch("/api/users/me")
                         .contentType(MediaType.APPLICATION_JSON)

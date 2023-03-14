@@ -3,6 +3,7 @@ package com.timedeal.numble.controller.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timedeal.numble.controller.error.CustomException;
 import com.timedeal.numble.controller.error.ErrorCode;
+import com.timedeal.numble.controller.user.User;
 import com.timedeal.numble.entity.UserEntity;
 import com.timedeal.numble.entity.UserRole;
 import com.timedeal.numble.service.UserService;
@@ -49,7 +50,7 @@ class SecurityControllerTest {
                 .build();
 
         when(userService.login(signInRequest))
-                .thenReturn(userEntity);
+                .thenReturn(User.fromUserEntity(userEntity));
 
         mockMvc.perform(post("/api/login")
                         .contentType(MediaType.APPLICATION_JSON)

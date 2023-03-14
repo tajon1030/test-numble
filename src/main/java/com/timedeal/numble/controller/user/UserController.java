@@ -1,6 +1,5 @@
 package com.timedeal.numble.controller.user;
 
-import com.timedeal.numble.entity.UserEntity;
 import com.timedeal.numble.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +29,9 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<?> withdraw(
             HttpServletRequest request,
-            @SessionAttribute("loginUser") UserEntity userEntity){
+            @SessionAttribute("loginUser") User user){
         // 회원 탈퇴
-        userService.withdraw(userEntity.getId());
+        userService.withdraw(user.getLoginId());
         // 로그인 세션 제거
         request.getSession(false).invalidate();
         return ResponseEntity.ok().build();
@@ -43,9 +42,8 @@ public class UserController {
      * @return
      */
     @GetMapping("me")
-    public ResponseEntity<User> me(@SessionAttribute("loginUser") UserEntity userEntity){
-        User user = User.fromUserEntity(userService.findByUserId(userEntity.getId()));
-        return ResponseEntity.ok(user);
+    public ResponseEntity<User> me(@SessionAttribute("loginUser") User user){
+        return ResponseEntity.ok(userService.findByLoginId(user.getLoginId()));
     }
 
     /**
@@ -53,11 +51,9 @@ public class UserController {
      * @return
      */
     @PatchMapping("me")
-    public ResponseEntity<User> modifyMe(@SessionAttribute("loginUser") UserEntity userEntity,
+    public ResponseEntity<User> modifyMe(@SessionAttribute("loginUser") User user,
                                          @RequestBody UserUpdateRequest request){
-        UserEntity userEntity1 = userService.modifyUser(userEntity.getId(), request);
-        User user = User.fromUserEntity(userEntity1);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userService.modifyUser(user.getLoginId(), request));
     }
 
 }
