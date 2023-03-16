@@ -1,6 +1,7 @@
 # timedeal-numble
 
-- 전체적인 시스템 구조도(아키텍쳐)
+- 전체적인 시스템 구조도(아키텍쳐)  
+![타임딜 drawio](https://user-images.githubusercontent.com/60431816/225598375-68fc9b2c-e963-4c0b-84f2-c2766f75e5e4.png)
 
 - API 목록  
 https://documenter.getpostman.com/view/24793112/2s93Jxr1Nw
@@ -17,4 +18,4 @@ https://www.figma.com/file/aCwsHHK9mna4GGsYhySZMj/%ED%83%80%EC%9E%84%EB%94%9C-%E
 - 성능측정 및 개선 내용
 
 
-- 회고록 URL
+- ~~회고록 URL~~
