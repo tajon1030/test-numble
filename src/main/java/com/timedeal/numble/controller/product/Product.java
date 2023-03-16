@@ -15,9 +15,10 @@ import java.time.LocalDateTime;
 @Data
 public class Product {
 
+    private Long id;
     private String name;
     private String desc;
-    private Long amount;
+    private Long quantity;
     private Money regularPrice;
     private BigDecimal percentOff;
     private Money salePrice;
@@ -28,9 +29,10 @@ public class Product {
 
     public static Product fromProductEntity(ProductEntity productEntity) {
         return Product.builder()
+                .id(productEntity.getId())
                 .name(productEntity.getName())
                 .desc(productEntity.getDescription())
-                .amount(productEntity.getAmount())
+                .quantity(productEntity.getQuantity())
                 .regularPrice(productEntity.getRegularPrice())
                 .salePrice(productEntity.getSalePrice())
                 .saleStartDateTime(productEntity.getSaleStartDateTime())
@@ -38,7 +40,7 @@ public class Product {
                 .build();
     }
 
-    public BigDecimal getPercentOff(){
+    public BigDecimal getPercentOff() {
         return this.regularPrice.getPercentOff(this.salePrice);
     }
 }

@@ -15,11 +15,11 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddProductRequest {
+public class ProductSaveRequest {
     @NotBlank
     private String name;
     private String description;
-    private Long amount;
+    private Long quantity;
     private Money regularPrice;
     private Money salePrice;
     // FIXME CustomDeserializer 만들기
@@ -28,11 +28,11 @@ public class AddProductRequest {
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime saleEndDateTime;
 
-    public ProductEntity toProductEntity(){
+    public ProductEntity toProductEntity() {
         return ProductEntity.builder()
                 .name(this.name)
                 .description(this.description)
-                .amount(this.amount)
+                .quantity(this.quantity)
                 .regularPrice(this.regularPrice)
                 .salePrice(this.salePrice)
                 .saleStartDateTime(this.saleStartDateTime)

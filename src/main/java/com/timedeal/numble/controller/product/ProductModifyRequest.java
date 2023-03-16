@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModifyProductRequest {
+public class ProductModifyRequest {
     private String name;
     private String description;
-    private Long amount;
+    private Long quantity;
     private Money regularPrice;
     private Money salePrice;
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")

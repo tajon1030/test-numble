@@ -24,15 +24,21 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    /**
+     * 로그인아이디로 유저정보 조회
+     */
     @Transactional(readOnly = true)
-    public User findByLoginId(String loginId){
+    public User findByLoginId(String loginId) {
         return userRepository.findByLoginId(loginId)
                 .map(User::fromUserEntity)
-                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
+    /**
+     * 회원가입
+     */
     @Transactional
-    public void join(@Valid SignUpRequest signUpRequest){
+    public void join(@Valid SignUpRequest signUpRequest) {
         // 아이디 존재여부 확인
         userRepository.findByLoginId(signUpRequest.getLoginId()).ifPresent(userEntity -> {
             throw new CustomException(ErrorCode.DUPLICATED_LOGIN_ID);
@@ -48,26 +54,35 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
+    /**
+     * 로그인
+     */
     @Transactional(readOnly = true)
     public User login(@Valid SignInRequest signInRequest) {
         // 검색
         return userRepository.findByLoginId(signInRequest.getLoginId())
                 .map(userEntity -> {
                     // 패스워드 일치 시
-                    if(userEntity.getPassword().equals(signInRequest.getPassword())){
+                    if (userEntity.getPassword().equals(signInRequest.getPassword())) {
                         return User.fromUserEntity(userEntity);
-                    }else{
+                    } else {
                         throw new CustomException(ErrorCode.INVALID_PASSWORD);
                     }
                 })
-                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
+    /**
+     * 회원 탈퇴
+     */
     @Transactional
     public void withdraw(String loginId) {
         userRepository.deleteByLoginId(loginId);
     }
 
+    /**
+     * 회원 정보 수정
+     */
     @Transactional
     public User modifyUser(String loginId, @Valid UserUpdateRequest request) {
         return userRepository.findByLoginId(loginId).map(userEntity -> {
@@ -76,6 +91,6 @@ public class UserService {
                     StringUtils.defaultIfBlank(request.getPassword(), userEntity.getPassword())
             );
             return User.fromUserEntity(updateUserEntity);
-        }).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+        }).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

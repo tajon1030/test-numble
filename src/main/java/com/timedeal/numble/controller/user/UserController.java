@@ -15,10 +15,11 @@ public class UserController {
 
     /**
      * 회원가입
+     *
      * @return
      */
     @PostMapping
-    public ResponseEntity<?> join(@RequestBody SignUpRequest signUpRequest){
+    public ResponseEntity<?> join(@RequestBody SignUpRequest signUpRequest) {
         userService.join(signUpRequest);
         return ResponseEntity.ok().build();
     }
@@ -29,7 +30,7 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<?> withdraw(
             HttpServletRequest request,
-            @SessionAttribute("loginUser") User user){
+            @SessionAttribute("loginUser") User user) {
         // 회원 탈퇴
         userService.withdraw(user.getLoginId());
         // 로그인 세션 제거
@@ -39,20 +40,22 @@ public class UserController {
 
     /**
      * 내 정보 조회
+     *
      * @return
      */
     @GetMapping("me")
-    public ResponseEntity<User> me(@SessionAttribute("loginUser") User user){
+    public ResponseEntity<User> me(@SessionAttribute("loginUser") User user) {
         return ResponseEntity.ok(userService.findByLoginId(user.getLoginId()));
     }
 
     /**
      * 내 정보 수정
+     *
      * @return
      */
     @PatchMapping("me")
     public ResponseEntity<User> modifyMe(@SessionAttribute("loginUser") User user,
-                                         @RequestBody UserUpdateRequest request){
+                                         @RequestBody UserUpdateRequest request) {
         return ResponseEntity.ok(userService.modifyUser(user.getLoginId(), request));
     }
 

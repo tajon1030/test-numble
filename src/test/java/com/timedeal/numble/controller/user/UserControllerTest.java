@@ -80,7 +80,7 @@ class UserControllerTest {
 
     @Test
     public void 회원탈퇴() throws Exception {
-        User user = new User("loginId","userName",UserRole.MEMBER);
+        User user = new User("loginId", "userName", UserRole.MEMBER);
 
         doNothing().when(userService).withdraw(user.getLoginId());
 
@@ -96,7 +96,7 @@ class UserControllerTest {
 
     @Test
     public void 내정보조회() throws Exception {
-        User user = new User("loginId","userName",UserRole.MEMBER);
+        User user = new User("loginId", "userName", UserRole.MEMBER);
 
         when(userService.findByLoginId(user.getLoginId()))
                 .thenReturn(user);
@@ -122,7 +122,7 @@ class UserControllerTest {
                 .userRole(UserRole.MEMBER)
                 .build();
         User user = User.fromUserEntity(userEntity);
-        UserUpdateRequest updateRequest = new UserUpdateRequest("userName2","password2");
+        UserUpdateRequest updateRequest = new UserUpdateRequest("userName2", "password2");
 
         UserEntity updateUserEntity = UserEntity.builder()
                 .id(userEntity.getId())

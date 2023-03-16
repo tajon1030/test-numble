@@ -19,7 +19,7 @@ public class SecurityController {
      * 로그인
      */
     @PostMapping("login")
-    public ResponseEntity<?> login(HttpServletRequest request, @RequestBody SignInRequest signInRequest){
+    public ResponseEntity<?> login(HttpServletRequest request, @RequestBody SignInRequest signInRequest) {
         User loginUser = userService.login(signInRequest);
         // 세션저장
         HttpSession session = request.getSession();
@@ -29,11 +29,12 @@ public class SecurityController {
 
     /**
      * 로그아웃
+     *
      * @param request
      * @return
      */
     @GetMapping("logout")
-    public ResponseEntity<?> logout(HttpServletRequest request){
+    public ResponseEntity<?> logout(HttpServletRequest request) {
         // 세션 삭제
         request.getSession(false).invalidate();
         return ResponseEntity.ok().build();

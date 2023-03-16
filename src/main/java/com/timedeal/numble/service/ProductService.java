@@ -2,8 +2,8 @@ package com.timedeal.numble.service;
 
 import com.timedeal.numble.controller.error.CustomException;
 import com.timedeal.numble.controller.error.ErrorCode;
-import com.timedeal.numble.controller.product.AddProductRequest;
-import com.timedeal.numble.controller.product.ModifyProductRequest;
+import com.timedeal.numble.controller.product.ProductSaveRequest;
+import com.timedeal.numble.controller.product.ProductModifyRequest;
 import com.timedeal.numble.controller.product.Product;
 import com.timedeal.numble.entity.ProductEntity;
 import com.timedeal.numble.repository.ProductRepository;
@@ -25,7 +25,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public Product addProduct(@Valid AddProductRequest request) {
+    public Product addProduct(@Valid ProductSaveRequest request) {
         ProductEntity saveProductEntity = productRepository.save(request.toProductEntity());
         return Product.fromProductEntity(saveProductEntity);
     }
@@ -34,7 +34,7 @@ public class ProductService {
     public Product getProduct(Long productId) {
         return productRepository.findById(productId)
                 .map(Product::fromProductEntity)
-                .orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -44,13 +44,13 @@ public class ProductService {
     }
 
     @Transactional
-    public Product modifyProduct(Long productId, ModifyProductRequest request) {
+    public Product modifyProduct(Long productId, ProductModifyRequest request) {
         return productRepository.findById(productId)
                 .map(productEntity -> {
                     ProductEntity updatedProductEntity = productEntity.update(
                             request.getName(),
                             request.getDescription(),
-                            request.getAmount(),
+                            request.getQuantity(),
                             request.getRegularPrice(),
                             request.getSalePrice(),
                             request.getSaleStartDateTime(),
@@ -58,7 +58,7 @@ public class ProductService {
                     );
                     return Product.fromProductEntity(updatedProductEntity);
                 })
-                .orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
     @Transactional
