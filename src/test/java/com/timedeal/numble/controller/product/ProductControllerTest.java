@@ -46,8 +46,8 @@ class ProductControllerTest {
                 .description("test")
                 .regularPrice(new Money("1000"))
                 .salePrice(new Money("800"))
-                .saleStartDateTime(LocalDateTime.of(2023,3,15,0,0))
-                .saleEndDateTime(LocalDateTime.of(2023,3,16,0,0))
+                .saleStartDateTime(LocalDateTime.of(2023, 3, 15, 0, 0))
+                .saleEndDateTime(LocalDateTime.of(2023, 3, 16, 0, 0))
                 .build();
 
         Product product = Product.fromProductEntity(productSaveRequest.toProductEntity());
@@ -56,7 +56,7 @@ class ProductControllerTest {
                 .thenReturn(product);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.ADMIN);
+        User user = new User("loginId", "userName", UserRole.ADMIN);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(post("/api/products")
@@ -75,8 +75,8 @@ class ProductControllerTest {
                 .description("test")
                 .regularPrice(new Money("1000"))
                 .salePrice(new Money("800"))
-                .saleStartDateTime(LocalDateTime.of(2023,3,15,0,0))
-                .saleEndDateTime(LocalDateTime.of(2023,3,16,0,0))
+                .saleStartDateTime(LocalDateTime.of(2023, 3, 15, 0, 0))
+                .saleEndDateTime(LocalDateTime.of(2023, 3, 16, 0, 0))
                 .build();
 
         Product product = Product.fromProductEntity(productSaveRequest.toProductEntity());
@@ -85,7 +85,7 @@ class ProductControllerTest {
                 .thenReturn(product);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.MEMBER);
+        User user = new User("loginId", "userName", UserRole.MEMBER);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(post("/api/products")
@@ -105,21 +105,21 @@ class ProductControllerTest {
                 .description("test")
                 .regularPrice(new Money("1000"))
                 .salePrice(new Money("800"))
-                .saleStartDateTime(LocalDateTime.of(2023,3,15,0,0))
-                .saleEndDateTime(LocalDateTime.of(2023,3,16,0,0))
+                .saleStartDateTime(LocalDateTime.of(2023, 3, 15, 0, 0))
+                .saleEndDateTime(LocalDateTime.of(2023, 3, 16, 0, 0))
                 .build();
         ProductModifyRequest productModifyRequest = ProductModifyRequest.builder()
                 .name("modify")
                 .build();
         Product product = Product.fromProductEntity(
                 productEntity.update(productModifyRequest.getName(),
-                        null,null,null,null,null,null));
+                        null, null, null, null, null, null));
 
         when(productService.modifyProduct(productEntity.getId(), productModifyRequest))
                 .thenReturn(product);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.ADMIN);
+        User user = new User("loginId", "userName", UserRole.ADMIN);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(patch("/api/products/1")
@@ -139,21 +139,21 @@ class ProductControllerTest {
                 .description("test")
                 .regularPrice(new Money("1000"))
                 .salePrice(new Money("800"))
-                .saleStartDateTime(LocalDateTime.of(2023,3,15,0,0))
-                .saleEndDateTime(LocalDateTime.of(2023,3,16,0,0))
+                .saleStartDateTime(LocalDateTime.of(2023, 3, 15, 0, 0))
+                .saleEndDateTime(LocalDateTime.of(2023, 3, 16, 0, 0))
                 .build();
         ProductModifyRequest productModifyRequest = ProductModifyRequest.builder()
                 .name("modify")
                 .build();
         Product product = Product.fromProductEntity(
                 productEntity.update(productModifyRequest.getName(),
-                        null,null,null,null,null,null));
+                        null, null, null, null, null, null));
 
         when(productService.modifyProduct(productEntity.getId(), productModifyRequest))
                 .thenReturn(product);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.MEMBER);
+        User user = new User("loginId", "userName", UserRole.MEMBER);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(patch("/api/products/1")
@@ -174,7 +174,7 @@ class ProductControllerTest {
                 .thenThrow(new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.ADMIN);
+        User user = new User("loginId", "userName", UserRole.ADMIN);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(patch("/api/products/1")
@@ -190,7 +190,7 @@ class ProductControllerTest {
         doNothing().when(productService).removeProduct(1L);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.ADMIN);
+        User user = new User("loginId", "userName", UserRole.ADMIN);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(delete("/api/products/1")
@@ -206,7 +206,7 @@ class ProductControllerTest {
         doNothing().when(productService).removeProduct(1L);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.MEMBER);
+        User user = new User("loginId", "userName", UserRole.MEMBER);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(delete("/api/products/1")
@@ -222,7 +222,7 @@ class ProductControllerTest {
                 .when(productService).removeProduct(1L);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.ADMIN);
+        User user = new User("loginId", "userName", UserRole.ADMIN);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(delete("/api/products/1")
@@ -235,7 +235,7 @@ class ProductControllerTest {
     @Test
     public void 상품조회() throws Exception {
         Long productId = 1L;
-        Product product =  Product.fromProductEntity(
+        Product product = Product.fromProductEntity(
                 ProductEntity.builder()
                         .id(productId)
                         .name("test")
@@ -243,15 +243,15 @@ class ProductControllerTest {
                         .description("test")
                         .regularPrice(new Money("1000"))
                         .salePrice(new Money("800"))
-                        .saleStartDateTime(LocalDateTime.of(2023,3,15,0,0))
-                        .saleEndDateTime(LocalDateTime.of(2023,3,16,0,0))
+                        .saleStartDateTime(LocalDateTime.of(2023, 3, 15, 0, 0))
+                        .saleEndDateTime(LocalDateTime.of(2023, 3, 16, 0, 0))
                         .build());
 
         when(productService.getProduct(productId))
                 .thenReturn(product);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.ADMIN);
+        User user = new User("loginId", "userName", UserRole.ADMIN);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(get("/api/products/1")
@@ -268,7 +268,7 @@ class ProductControllerTest {
                 .thenThrow(new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.ADMIN);
+        User user = new User("loginId", "userName", UserRole.ADMIN);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(get("/api/products/1")
@@ -284,7 +284,7 @@ class ProductControllerTest {
                 .thenReturn(Page.empty());
 
         MockHttpSession mockHttpSession = new MockHttpSession();
-        User user = new User("loginId","userName", UserRole.ADMIN);
+        User user = new User("loginId", "userName", UserRole.ADMIN);
         mockHttpSession.setAttribute("loginUser", user);
 
         mockMvc.perform(get("/api/products")

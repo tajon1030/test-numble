@@ -17,7 +17,7 @@ public class Order {
     private Product product;
     private User user;
 
-    public static Order fromOrderEntity(OrderEntity orderEntity){
+    public static Order fromOrderEntity(OrderEntity orderEntity) {
         return Order.builder()
                 .id(orderEntity.getId())
                 .product(Product.fromProductEntity(orderEntity.getProduct()))

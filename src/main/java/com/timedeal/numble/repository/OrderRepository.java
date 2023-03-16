@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     Page<OrderEntity> findByUserId(Long userId, Pageable pageable);
+
     Page<OrderEntity> findByProductId(Long productId, Pageable pageable);
+
     Optional<OrderEntity> findByUserIdAndProductId(Long userId, Long productId);
 }

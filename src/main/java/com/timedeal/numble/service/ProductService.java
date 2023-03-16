@@ -34,7 +34,7 @@ public class ProductService {
     public Product getProduct(Long productId) {
         return productRepository.findById(productId)
                 .map(Product::fromProductEntity)
-                .orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -58,7 +58,7 @@ public class ProductService {
                     );
                     return Product.fromProductEntity(updatedProductEntity);
                 })
-                .orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
     @Transactional

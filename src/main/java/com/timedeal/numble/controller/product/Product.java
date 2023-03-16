@@ -38,7 +38,7 @@ public class Product {
                 .build();
     }
 
-    public BigDecimal getPercentOff(){
+    public BigDecimal getPercentOff() {
         return this.regularPrice.getPercentOff(this.salePrice);
     }
 }

@@ -32,22 +32,22 @@ public class OrderService {
                 .map(user -> {
                     // 중복 주문여부 확인
                     orderRepository.findByUserIdAndProductId(user.getId(), request.getProductId())
-                            .ifPresent(order-> {
+                            .ifPresent(order -> {
                                 throw new CustomException(ErrorCode.DUPLICATED_ORDER);
                             });
                     return user;
                 })
-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 상품 조회
         return productRepository.findById(request.getProductId())
-                .map(productEntity->{
+                .map(productEntity -> {
                     // 상품 재고 체크
-                    if(productEntity.isSoldOut()) {
+                    if (productEntity.isSoldOut()) {
                         throw new CustomException(ErrorCode.PRODUCT_SOLD_OUT);
                     }
                     // 주문 가능 시간 여부 체크
-                    if(!productEntity.isSaleTime()){
+                    if (!productEntity.isSaleTime()) {
                         throw new CustomException(ErrorCode.NOT_SALE_TIME);
                     }
 
@@ -62,7 +62,7 @@ public class OrderService {
     public Order getOrder(Long orderId) {
         return orderRepository.findById(orderId)
                 .map(Order::fromOrderEntity)
-                .orElseThrow(()->new CustomException(ErrorCode.ORDER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -88,12 +88,12 @@ public class OrderService {
     @Transactional
     public void cancelOrder(Long orderId) {
         orderRepository.findById(orderId)
-                .ifPresentOrElse(orderEntity->{
+                .ifPresentOrElse(orderEntity -> {
                     // 재고량 다시 추가
                     orderEntity.getProduct().addQuantity(1); // 하드코딩 주문수량 1
                     // 주문 삭제
                     orderRepository.delete(orderEntity);
-                }, ()->{
+                }, () -> {
                     throw new CustomException(ErrorCode.ORDER_NOT_FOUND);
                 });
     }

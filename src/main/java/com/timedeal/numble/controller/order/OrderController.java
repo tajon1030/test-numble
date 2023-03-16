@@ -19,45 +19,49 @@ public class OrderController {
 
     /**
      * 주문하기
-     * @param user 로그인 사용자
+     *
+     * @param user    로그인 사용자
      * @param request 상품 주문 요청 DTO
      */
     @PostMapping
     public ResponseEntity<?> order(@SessionAttribute("loginUser") User user,
-                                      @RequestBody OrderSaveRequest request){
+                                   @RequestBody OrderSaveRequest request) {
         orderService.addOrder(user.getLoginId(), request);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 주문 상세 조회
-     * @param user 로그인 사용자
+     *
+     * @param user    로그인 사용자
      * @param orderId 주문 일련번호
      * @return 주문 DTO
      */
     @GetMapping("{orderId}")
     public ResponseEntity<Order> getOrder(@SessionAttribute("loginUser") User user,
-                                         @PathVariable("orderId") Long orderId){
+                                          @PathVariable("orderId") Long orderId) {
         return ResponseEntity.ok(orderService.getOrder(orderId));
     }
 
     /**
      * 주문 취소
-     * @param user 로그인 사용자
+     *
+     * @param user    로그인 사용자
      * @param orderId 주문 일련번호
      */
     @DeleteMapping("{orderId}")
     public ResponseEntity<?> cancelOrder(@SessionAttribute("loginUser") User user,
-                                         @PathVariable("orderId") Long orderId){
+                                         @PathVariable("orderId") Long orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 유저의 구매한 상품리스트 조회
+     *
      * @param loginUser 로그인 사용자
-     * @param loginId 조회할 유저 아이디
-     * @param pageable 페이지 값
+     * @param loginId   조회할 유저 아이디
+     * @param pageable  페이지 값
      * @return 상품 페이지
      */
     @GetMapping("/member/{loginId}")
@@ -74,9 +78,10 @@ public class OrderController {
 
     /**
      * 상품별 구매한 유저 리스트 조회
+     *
      * @param loginUser 로그인 사용자
      * @param productId 조회할 상품 일련번호
-     * @param pageable 페이지 값
+     * @param pageable  페이지 값
      * @return 유저 페이지
      */
     @GetMapping("/product/{productId}")

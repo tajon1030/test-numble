@@ -28,7 +28,7 @@ public class ProductSaveRequest {
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime saleEndDateTime;
 
-    public ProductEntity toProductEntity(){
+    public ProductEntity toProductEntity() {
         return ProductEntity.builder()
                 .name(this.name)
                 .description(this.description)
