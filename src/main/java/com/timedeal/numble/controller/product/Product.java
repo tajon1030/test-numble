@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Data
 public class Product {
 
+    private Long id;
     private String name;
     private String desc;
     private Long amount;
@@ -28,6 +29,7 @@ public class Product {
 
     public static Product fromProductEntity(ProductEntity productEntity) {
         return Product.builder()
+                .id(productEntity.getId())
                 .name(productEntity.getName())
                 .desc(productEntity.getDescription())
                 .amount(productEntity.getQuantity())
