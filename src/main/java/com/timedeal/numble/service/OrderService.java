@@ -25,6 +25,9 @@ public class OrderService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
+    /**
+     * 구매하기
+     */
     @Transactional
     public Long addOrder(String loginId, OrderSaveRequest request) {
         // 유저 존재여부 확인
@@ -58,6 +61,9 @@ public class OrderService {
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
+    /**
+     * 구매 내역 단건 조회
+     */
     @Transactional(readOnly = true)
     public Order getOrder(Long orderId) {
         return orderRepository.findById(orderId)
@@ -65,6 +71,9 @@ public class OrderService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
     }
 
+    /**
+     * 유저의 구매한 상품 리스트 보기
+     */
     @Transactional(readOnly = true)
     public Page<Order> getMemberOrders(String loginId, Pageable pageable) {
         // 유저 존재여부 확인
@@ -75,6 +84,9 @@ public class OrderService {
                 .map(Order::fromOrderEntity);
     }
 
+    /**
+     * 상품별 구매한 유저리스트 조회
+     */
     @Transactional(readOnly = true)
     public Page<Order> getProductOrders(Long productId, Pageable pageable) {
         // 상품 존재여부 확인
@@ -85,6 +97,9 @@ public class OrderService {
                 .map(Order::fromOrderEntity);
     }
 
+    /**
+     * 구매 취소
+     */
     @Transactional
     public void cancelOrder(Long orderId) {
         orderRepository.findById(orderId)
