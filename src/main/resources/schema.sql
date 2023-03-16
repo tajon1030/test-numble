@@ -1,6 +1,6 @@
+drop table if exists orders;
 drop table if exists user;
 drop table if exists product;
-drop table if exists orders;
 
 create table user
 (
