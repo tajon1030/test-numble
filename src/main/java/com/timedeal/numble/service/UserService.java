@@ -71,13 +71,11 @@ public class UserService {
     @Transactional
     public User modifyUser(String loginId, @Valid UserUpdateRequest request) {
         return userRepository.findByLoginId(loginId).map(userEntity -> {
-            UserEntity updatedUserEntity = userRepository.save(
-                    userEntity.update(
-                            StringUtils.defaultIfBlank(request.getUserName(), userEntity.getUserName()),
-                            StringUtils.defaultIfBlank(request.getPassword(), userEntity.getPassword())
-                    )
+            UserEntity updateUserEntity = userEntity.update(
+                    StringUtils.defaultIfBlank(request.getUserName(), userEntity.getUserName()),
+                    StringUtils.defaultIfBlank(request.getPassword(), userEntity.getPassword())
             );
-            return User.fromUserEntity(updatedUserEntity);
+            return User.fromUserEntity(updateUserEntity);
         }).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }
