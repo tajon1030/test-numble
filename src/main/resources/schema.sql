@@ -33,5 +33,8 @@ create table orders
     product_id int not null,
     user_id int not null,
 
-    primary key (ID)
+    primary key (id),
+    foreign key (product_id) REFERENCES product (id),
+    foreign key (user_id) REFERENCES user (id)
+
 );
