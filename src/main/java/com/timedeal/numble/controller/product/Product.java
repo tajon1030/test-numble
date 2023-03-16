@@ -18,7 +18,7 @@ public class Product {
     private Long id;
     private String name;
     private String desc;
-    private Long amount;
+    private Long quantity;
     private Money regularPrice;
     private BigDecimal percentOff;
     private Money salePrice;
@@ -32,7 +32,7 @@ public class Product {
                 .id(productEntity.getId())
                 .name(productEntity.getName())
                 .desc(productEntity.getDescription())
-                .amount(productEntity.getQuantity())
+                .quantity(productEntity.getQuantity())
                 .regularPrice(productEntity.getRegularPrice())
                 .salePrice(productEntity.getSalePrice())
                 .saleStartDateTime(productEntity.getSaleStartDateTime())
