@@ -45,7 +45,7 @@ public class ProductController {
      */
     @PostMapping
     public ResponseEntity<Product> addProduct(@SessionAttribute("loginUser") User user,
-                                       @RequestBody AddProductRequest request){
+                                       @RequestBody ProductSaveRequest request){
         // 관리자 권한 확인
         Utils.checkAdminPermission(user);
         return ResponseEntity.ok(productService.addProduct(request));
@@ -61,7 +61,7 @@ public class ProductController {
     @PatchMapping("{productId}")
     public ResponseEntity<Product> modifyProduct(@SessionAttribute("loginUser") User user,
                                               @PathVariable Long productId,
-                                              @RequestBody ModifyProductRequest request){
+                                              @RequestBody ProductModifyRequest request){
         // 관리자 권한 확인
         Utils.checkAdminPermission(user);
         return ResponseEntity.ok(productService.modifyProduct(productId, request));

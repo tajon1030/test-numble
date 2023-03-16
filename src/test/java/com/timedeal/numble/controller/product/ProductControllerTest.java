@@ -40,9 +40,9 @@ class ProductControllerTest {
 
     @Test
     public void 상품등록() throws Exception {
-        AddProductRequest addProductRequest = AddProductRequest.builder()
+        ProductSaveRequest productSaveRequest = ProductSaveRequest.builder()
                 .name("test")
-                .amount(1L)
+                .quantity(1L)
                 .description("test")
                 .regularPrice(new Money("1000"))
                 .salePrice(new Money("800"))
@@ -50,9 +50,9 @@ class ProductControllerTest {
                 .saleEndDateTime(LocalDateTime.of(2023,3,16,0,0))
                 .build();
 
-        Product product = Product.fromProductEntity(addProductRequest.toProductEntity());
+        Product product = Product.fromProductEntity(productSaveRequest.toProductEntity());
 
-        when(productService.addProduct(addProductRequest))
+        when(productService.addProduct(productSaveRequest))
                 .thenReturn(product);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
@@ -62,16 +62,16 @@ class ProductControllerTest {
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .session(mockHttpSession)
-                        .content(objectMapper.writeValueAsBytes(addProductRequest))
+                        .content(objectMapper.writeValueAsBytes(productSaveRequest))
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     public void 상품등록시_관리자가_아닐경우_에러반환() throws Exception {
-        AddProductRequest addProductRequest = AddProductRequest.builder()
+        ProductSaveRequest productSaveRequest = ProductSaveRequest.builder()
                 .name("test")
-                .amount(1L)
+                .quantity(1L)
                 .description("test")
                 .regularPrice(new Money("1000"))
                 .salePrice(new Money("800"))
@@ -79,9 +79,9 @@ class ProductControllerTest {
                 .saleEndDateTime(LocalDateTime.of(2023,3,16,0,0))
                 .build();
 
-        Product product = Product.fromProductEntity(addProductRequest.toProductEntity());
+        Product product = Product.fromProductEntity(productSaveRequest.toProductEntity());
 
-        when(productService.addProduct(addProductRequest))
+        when(productService.addProduct(productSaveRequest))
                 .thenReturn(product);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
@@ -91,7 +91,7 @@ class ProductControllerTest {
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .session(mockHttpSession)
-                        .content(objectMapper.writeValueAsBytes(addProductRequest))
+                        .content(objectMapper.writeValueAsBytes(productSaveRequest))
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());
     }
@@ -101,21 +101,21 @@ class ProductControllerTest {
         ProductEntity productEntity = ProductEntity.builder()
                 .id(1L)
                 .name("test")
-                .amount(1L)
+                .quantity(1L)
                 .description("test")
                 .regularPrice(new Money("1000"))
                 .salePrice(new Money("800"))
                 .saleStartDateTime(LocalDateTime.of(2023,3,15,0,0))
                 .saleEndDateTime(LocalDateTime.of(2023,3,16,0,0))
                 .build();
-        ModifyProductRequest modifyProductRequest = ModifyProductRequest.builder()
+        ProductModifyRequest productModifyRequest = ProductModifyRequest.builder()
                 .name("modify")
                 .build();
         Product product = Product.fromProductEntity(
-                productEntity.update(modifyProductRequest.getName(),
+                productEntity.update(productModifyRequest.getName(),
                         null,null,null,null,null,null));
 
-        when(productService.modifyProduct(productEntity.getId(), modifyProductRequest))
+        when(productService.modifyProduct(productEntity.getId(), productModifyRequest))
                 .thenReturn(product);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
@@ -125,7 +125,7 @@ class ProductControllerTest {
         mockMvc.perform(patch("/api/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .session(mockHttpSession)
-                        .content(objectMapper.writeValueAsBytes(modifyProductRequest))
+                        .content(objectMapper.writeValueAsBytes(productModifyRequest))
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
@@ -135,21 +135,21 @@ class ProductControllerTest {
         ProductEntity productEntity = ProductEntity.builder()
                 .id(1L)
                 .name("test")
-                .amount(1L)
+                .quantity(1L)
                 .description("test")
                 .regularPrice(new Money("1000"))
                 .salePrice(new Money("800"))
                 .saleStartDateTime(LocalDateTime.of(2023,3,15,0,0))
                 .saleEndDateTime(LocalDateTime.of(2023,3,16,0,0))
                 .build();
-        ModifyProductRequest modifyProductRequest = ModifyProductRequest.builder()
+        ProductModifyRequest productModifyRequest = ProductModifyRequest.builder()
                 .name("modify")
                 .build();
         Product product = Product.fromProductEntity(
-                productEntity.update(modifyProductRequest.getName(),
+                productEntity.update(productModifyRequest.getName(),
                         null,null,null,null,null,null));
 
-        when(productService.modifyProduct(productEntity.getId(), modifyProductRequest))
+        when(productService.modifyProduct(productEntity.getId(), productModifyRequest))
                 .thenReturn(product);
 
         MockHttpSession mockHttpSession = new MockHttpSession();
@@ -159,18 +159,18 @@ class ProductControllerTest {
         mockMvc.perform(patch("/api/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .session(mockHttpSession)
-                        .content(objectMapper.writeValueAsBytes(modifyProductRequest))
+                        .content(objectMapper.writeValueAsBytes(productModifyRequest))
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void 상품수정시_존재하지않는_Id로_요청할경우_에러반환() throws Exception {
-        ModifyProductRequest modifyProductRequest = ModifyProductRequest.builder()
+        ProductModifyRequest productModifyRequest = ProductModifyRequest.builder()
                 .name("modify")
                 .build();
 
-        when(productService.modifyProduct(1L, modifyProductRequest))
+        when(productService.modifyProduct(1L, productModifyRequest))
                 .thenThrow(new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
         MockHttpSession mockHttpSession = new MockHttpSession();
@@ -180,7 +180,7 @@ class ProductControllerTest {
         mockMvc.perform(patch("/api/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .session(mockHttpSession)
-                        .content(objectMapper.writeValueAsBytes(modifyProductRequest))
+                        .content(objectMapper.writeValueAsBytes(productModifyRequest))
                 ).andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -239,7 +239,7 @@ class ProductControllerTest {
                 ProductEntity.builder()
                         .id(productId)
                         .name("test")
-                        .amount(1L)
+                        .quantity(1L)
                         .description("test")
                         .regularPrice(new Money("1000"))
                         .salePrice(new Money("800"))

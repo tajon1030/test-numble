@@ -17,7 +17,7 @@ create table product
     id int AUTO_INCREMENT,
     name varchar(50) not null,
     description text not null,
-    amount int not null,
+    quantity int not null,
     regular_price decimal not null,
     sale_price decimal not null,
     sale_start_date_time datetime not null,

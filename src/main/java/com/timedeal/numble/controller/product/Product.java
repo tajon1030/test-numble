@@ -30,7 +30,7 @@ public class Product {
         return Product.builder()
                 .name(productEntity.getName())
                 .desc(productEntity.getDescription())
-                .amount(productEntity.getAmount())
+                .amount(productEntity.getQuantity())
                 .regularPrice(productEntity.getRegularPrice())
                 .salePrice(productEntity.getSalePrice())
                 .saleStartDateTime(productEntity.getSaleStartDateTime())

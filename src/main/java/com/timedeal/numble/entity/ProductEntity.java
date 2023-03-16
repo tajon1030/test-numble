@@ -1,5 +1,7 @@
 package com.timedeal.numble.entity;
 
+import com.timedeal.numble.controller.error.CustomException;
+import com.timedeal.numble.controller.error.ErrorCode;
 import com.timedeal.numble.vo.Money;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +27,7 @@ public class ProductEntity {
     @Lob
     private String description;
 
-    private Long amount;
+    private Long quantity;
 
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "regular_price"))
@@ -39,12 +41,12 @@ public class ProductEntity {
 
     private LocalDateTime saleEndDateTime;
 
-    public ProductEntity update(String name, String desc, Long amount,
+    public ProductEntity update(String name, String desc, Long quantity,
                                 Money regularPrice, Money salePrice,
                                 LocalDateTime saleStartDateTime, LocalDateTime saleEndDateTime) {
         this.name = StringUtils.defaultIfBlank(name, this.name);
         this.description = StringUtils.defaultIfBlank(desc, this.description);
-        this.amount = ObjectUtils.defaultIfNull(amount, this.amount);
+        this.quantity = ObjectUtils.defaultIfNull(quantity, this.quantity);
         this.regularPrice = ObjectUtils.defaultIfNull(regularPrice, this.regularPrice);
         this.salePrice = ObjectUtils.defaultIfNull(salePrice, this.salePrice);
         this.saleStartDateTime = ObjectUtils.defaultIfNull(saleStartDateTime, this.saleStartDateTime);
