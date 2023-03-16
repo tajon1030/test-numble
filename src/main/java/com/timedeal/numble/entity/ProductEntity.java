@@ -54,8 +54,13 @@ public class ProductEntity {
         return this;
     }
 
-    public boolean isSoldOut(){
+    public boolean isSoldOut() {
         return this.quantity == 0L;
+    }
+
+    public boolean isSaleTime() {
+        return LocalDateTime.now().isAfter(this.saleStartDateTime) &&
+                LocalDateTime.now().isBefore(this.saleEndDateTime);
     }
 
     public void removeQuantity(long quantity) {

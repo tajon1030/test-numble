@@ -13,6 +13,8 @@ public enum ErrorCode {
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "MEMBER-ERR-401","Password is invalid"),
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT-ERR-404", "product not founded"),
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDER-ERR-404", "order not founded"),
+    NOT_SALE_TIME(HttpStatus.METHOD_NOT_ALLOWED, "ORDER-ERR-405", "not sale time"),
+    DUPLICATED_ORDER(HttpStatus.NOT_FOUND, "ORDER-ERR-409", "order is duplicated"),
     PRODUCT_SOLD_OUT(HttpStatus.NOT_FOUND, "PRODUCT-ERR-404", "product quantity is 0"),
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "MEMBER-ERR-401","Permission is invalid"),
 
