@@ -53,4 +53,21 @@ public class ProductEntity {
         this.saleEndDateTime = ObjectUtils.defaultIfNull(saleEndDateTime, this.saleEndDateTime);
         return this;
     }
+
+    public boolean isSoldOut(){
+        return this.quantity == 0L;
+    }
+
+    public void removeQuantity(long quantity) {
+        long restStock = this.quantity - quantity;
+        // 검증 중복?
+        if (restStock < 0) {
+            throw new CustomException(ErrorCode.PRODUCT_SOLD_OUT);
+        }
+        this.quantity = restStock;
+    }
+
+    public void addQuantity(long quantity) {
+        this.quantity += quantity;
+    }
 }

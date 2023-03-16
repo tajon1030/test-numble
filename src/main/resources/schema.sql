@@ -25,3 +25,12 @@ create table product
 
     primary key (ID)
 );
+
+create table orders
+(
+    id int AUTO_INCREMENT,
+    product_id int not null,
+    user_id int not null,
+
+    primary key (ID)
+);
