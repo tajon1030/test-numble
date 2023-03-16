@@ -71,7 +71,7 @@ public class OrderService {
         UserEntity userEntity = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        return orderRepository.findByUserEntity(userEntity, pageable)
+        return orderRepository.findByUserId(userEntity.getId(), pageable)
                 .map(Order::fromOrderEntity);
     }
 
@@ -81,7 +81,7 @@ public class OrderService {
         ProductEntity productEntity = productRepository.findById(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        return orderRepository.findByProductEntity(productEntity, pageable)
+        return orderRepository.findByProductId(productEntity.getId(), pageable)
                 .map(Order::fromOrderEntity);
     }
 

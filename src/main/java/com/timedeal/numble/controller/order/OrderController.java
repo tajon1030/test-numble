@@ -35,7 +35,7 @@ public class OrderController {
      * @param orderId 주문 일련번호
      * @return 주문 DTO
      */
-    @DeleteMapping("{orderId}")
+    @GetMapping("{orderId}")
     public ResponseEntity<Order> getOrder(@SessionAttribute("loginUser") User user,
                                          @PathVariable("orderId") Long orderId){
         return ResponseEntity.ok(orderService.getOrder(orderId));

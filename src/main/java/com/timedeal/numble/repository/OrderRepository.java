@@ -1,13 +1,14 @@
 package com.timedeal.numble.repository;
 
 import com.timedeal.numble.entity.OrderEntity;
-import com.timedeal.numble.entity.ProductEntity;
-import com.timedeal.numble.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
-    Page<OrderEntity> findByUserEntity(UserEntity userEntity, Pageable pageable);
-    Page<OrderEntity> findByProductEntity(ProductEntity productEntity, Pageable pageable);
+    Page<OrderEntity> findByUserId(Long userId, Pageable pageable);
+    Page<OrderEntity> findByProductId(Long productId, Pageable pageable);
+    Optional<OrderEntity> findByUserIdAndProductId(Long userId, Long productId);
 }
