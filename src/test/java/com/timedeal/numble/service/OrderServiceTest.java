@@ -37,6 +37,9 @@ class OrderServiceTest {
     LettuceOrderFacade lettuceOrderFacade;
 
     @Autowired
+    RedissonOrderFacade redissonOrderFacade;
+
+    @Autowired
     ProductRepository productRepository;
 
     @Autowired
@@ -181,6 +184,37 @@ class OrderServiceTest {
             executorService.submit(() -> {
                         try {
                             lettuceOrderFacade.addOrder("user" + finalI, new OrderSaveRequest(1L));
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        } finally {
+                            latch.countDown();
+                        }
+                    }
+            );
+        }
+
+        latch.await();
+
+        ProductEntity product = productRepository.findById(1L).orElseThrow();
+
+        //30 - (1*30) = 0
+        assertThat(product.getQuantity()).isEqualTo(0L);
+    }
+
+    @Test
+    public void 동시에_30개의_주문요청_Redisson() throws InterruptedException {
+        int threadCount = 30;
+        //멀티스레드 이용 ExecutorService : 비동기를 단순하게 처리할 수 있도록 해주는 java api
+        ExecutorService executorService = Executors.newFixedThreadPool(15);
+
+        //다른 스레드에서 수행이 완료될 때 까지 대기할 수 있도록 도와주는 API - 요청이 끝날때 까지 기다림
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        for (int i = 1; i <= threadCount; i++) {
+            int finalI = i;
+            executorService.submit(() -> {
+                        try {
+                            redissonOrderFacade.addOrder("user" + finalI, new OrderSaveRequest(1L));
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         } finally {
