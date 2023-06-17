@@ -23,6 +23,7 @@ create table product
     sale_price decimal not null,
     sale_start_date_time datetime not null,
     sale_end_date_time datetime not null,
+    version int default 0,
 
     primary key (ID)
 );

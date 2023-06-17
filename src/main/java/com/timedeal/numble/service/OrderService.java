@@ -64,6 +64,43 @@ public class OrderService {
 
 
     /**
+     * 구매하기 (Optimistic Lock)
+     */
+    @Transactional
+    public Long addOrderWithOptimisticLock(String loginId, OrderSaveRequest request) {
+        // 유저 존재여부 확인
+        UserEntity userEntity = userRepository.findByLoginId(loginId)
+                .map(user -> {
+                    // 중복 주문여부 확인
+                    orderRepository.findByUserIdAndProductId(user.getId(), request.getProductId())
+                            .ifPresent(order -> {
+                                throw new CustomException(ErrorCode.DUPLICATED_ORDER);
+                            });
+                    return user;
+                })
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 상품 조회
+        return productRepository.findByWithOptimisticLock(request.getProductId())
+                .map(productEntity -> {
+                    // 상품 재고 체크
+                    if (productEntity.isSoldOut()) {
+                        throw new CustomException(ErrorCode.PRODUCT_SOLD_OUT);
+                    }
+                    // 주문 가능 시간 여부 체크
+                    if (!productEntity.isSaleTime()) {
+                        throw new CustomException(ErrorCode.NOT_SALE_TIME);
+                    }
+
+                    // 주문 등록
+                    OrderEntity savedOrder = orderRepository.save(OrderEntity.create(userEntity, productEntity));
+                    return savedOrder.getId();
+                })
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
+
+
+    /**
      * 구매하기 (Synchronized)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE)

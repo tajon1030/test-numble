@@ -41,6 +41,9 @@ public class ProductEntity {
 
     private LocalDateTime saleEndDateTime;
 
+    @Version
+    private Long version;
+
     public ProductEntity update(String name, String desc, Long quantity,
                                 Money regularPrice, Money salePrice,
                                 LocalDateTime saleStartDateTime, LocalDateTime saleEndDateTime) {

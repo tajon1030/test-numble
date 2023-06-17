@@ -17,4 +17,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "1000")})
     @Query(value = "select p from ProductEntity p where p.id = :productId")
     Optional<ProductEntity> findByIdWithPessimisticLock(@Param("productId") Long productId);
+
+    //Optimistic Lock
+    @Lock(value = LockModeType.OPTIMISTIC)
+    @Query("select p from ProductEntity p where p.id = :productId")
+    Optional<ProductEntity> findByWithOptimisticLock(@Param("productId") Long productId);
 }
