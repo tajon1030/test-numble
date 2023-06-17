@@ -43,7 +43,7 @@ public class OrderService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 상품 조회
-        return productRepository.findByIdForUpdate(request.getProductId())
+        return productRepository.findByIdWithPessimisticLock(request.getProductId())
                 .map(productEntity -> {
                     // 상품 재고 체크
                     if (productEntity.isSoldOut()) {

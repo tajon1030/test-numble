@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/numble?serverTimezone=Asia/Seoul
+    username: root
+    password: K12025Tajon^@^
+
+  sql:
+    init:
+      mode: always
