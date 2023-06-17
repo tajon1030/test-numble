@@ -26,7 +26,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> order(@SessionAttribute("loginUser") User user,
                                    @RequestBody OrderSaveRequest request) {
-        orderService.addOrder(user.getLoginId(), request);
+        orderService.addOrderWithPessimisticLock(user.getLoginId(), request);
         return ResponseEntity.ok().build();
     }
 

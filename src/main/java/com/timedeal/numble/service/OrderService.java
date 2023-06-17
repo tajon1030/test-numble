@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -29,7 +30,7 @@ public class OrderService {
      * 구매하기
      */
     @Transactional
-    public Long addOrder(String loginId, OrderSaveRequest request) {
+    public Long addOrderWithPessimisticLock(String loginId, OrderSaveRequest request) {
         // 유저 존재여부 확인
         UserEntity userEntity = userRepository.findByLoginId(loginId)
                 .map(user -> {
@@ -60,6 +61,44 @@ public class OrderService {
                 })
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
+
+
+    /**
+     * 구매하기 (Synchronized)
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public synchronized Long addOrderWithSynchronized(String loginId, OrderSaveRequest request) {
+        // 유저 존재여부 확인
+        UserEntity userEntity = userRepository.findByLoginId(loginId)
+                .map(user -> {
+                    // 중복 주문여부 확인
+                    orderRepository.findByUserIdAndProductId(user.getId(), request.getProductId())
+                            .ifPresent(order -> {
+                                throw new CustomException(ErrorCode.DUPLICATED_ORDER);
+                            });
+                    return user;
+                })
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 상품 조회
+        return productRepository.findById(request.getProductId())
+                .map(productEntity -> {
+                    // 상품 재고 체크
+                    if (productEntity.isSoldOut()) {
+                        throw new CustomException(ErrorCode.PRODUCT_SOLD_OUT);
+                    }
+                    // 주문 가능 시간 여부 체크
+                    if (!productEntity.isSaleTime()) {
+                        throw new CustomException(ErrorCode.NOT_SALE_TIME);
+                    }
+
+                    // 주문 등록
+                    OrderEntity savedOrder = orderRepository.saveAndFlush(OrderEntity.create(userEntity, productEntity));
+                    return savedOrder.getId();
+                })
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
+
 
     /**
      * 구매 내역 단건 조회
