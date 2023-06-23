@@ -3,6 +3,6 @@ test: prod
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATASOURCEURL}
+    url: ${SPRING_DATASOURCE_URL}
     username: root
     password: root
