@@ -103,7 +103,7 @@ public class OrderService {
     /**
      * 구매하기 (Synchronized)
      */
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public synchronized Long addOrderWithSynchronized(String loginId, OrderSaveRequest request) {
         // 유저 존재여부 확인
         UserEntity userEntity = userRepository.findByLoginId(loginId)
@@ -139,7 +139,7 @@ public class OrderService {
     /**
      * 구매하기
      */
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public Long addOrder(String loginId, OrderSaveRequest request) {
         // 유저 존재여부 확인
         UserEntity userEntity = userRepository.findByLoginId(loginId)
